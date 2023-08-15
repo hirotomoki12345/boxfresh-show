@@ -10,12 +10,11 @@
 
   <script>
     const cloud_name = "dxzsajngl";
-    const folder_name = "date";
-    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloud_name}/resources/upload`;
+    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloud_name}/resources`;
 
     // Cloudinaryからファイルリストを取得して表示する関数
     function fetchAndDisplayFiles() {
-      fetch(`${cloudinaryUrl}/${folder_name}`)
+      fetch(`${cloudinaryUrl}/upload`)
         .then(response => response.json())
         .then(data => {
           const fileList = document.getElementById("fileList");
@@ -38,7 +37,7 @@
 
     // ファイルの内容を取得して表示する関数
     function displayFileContent(public_id) {
-      fetch(`https://res.cloudinary.com/${cloud_name}/raw/upload/${folder_name}/${public_id}.txt`)
+      fetch(`https://res.cloudinary.com/${cloud_name}/raw/upload/${public_id}.txt`)
         .then(response => response.text())
         .then(content => {
           const fileContent = document.getElementById("fileContent");
