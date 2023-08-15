@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stored Files Viewer</title>
+</head>
+<body>
+  <h1>Stored Files Viewer</h1>
+  <ul id="fileList"></ul>
+  <div id="fileContent"></div>
+
+  <script>
+    const cloud_name = "dxzsajngl";
+    const folder_name = "date";
+    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloud_name}/resources/upload`;
+
+    // Cloudinaryからファイルリストを取得して表示する関数
+    function fetchAndDisplayFiles() {
+      fetch(`${cloudinaryUrl}/${folder_name}`)
+        .then(response => response.json())
+        .then(data => {
+          const fileList = document.getElementById("fileList");
+
+          data.resources.forEach(file => {
+            const listItem = document.createElement("li");
+            const link = document.createElement("a");
+            link.href = `javascript:void(0);`;
+            link.textContent = file.public_id;
+            link.addEventListener("click", () => displayFileContent(file.public_id));
+            listItem.appendChild(link);
+
+            fileList.appendChild(listItem);
+          });
+        })
+        .catch(error => {
+          console.error("Error fetching files:", error);
+        });
+    }
+
+    // ファイルの内容を取得して表示する関数
+    function displayFileContent(public_id) {
+      fetch(`https://res.cloudinary.com/${cloud_name}/raw/upload/${folder_name}/${public_id}.txt`)
+        .then(response => response.text())
+        .then(content => {
+          const fileContent = document.getElementById("fileContent");
+          fileContent.textContent = content;
+        })
+        .catch(error => {
+          console.error("Error fetching file content:", error);
+        });
+    }
+
+    // ページの読み込み時にファイルリストを取得して表示
+    window.onload = fetchAndDisplayFiles;
+  </script>
+</body>
+</html>
